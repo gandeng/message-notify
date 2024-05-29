@@ -16,9 +16,29 @@ abstract class AbstractTemplate
 
     protected string $title = '';
 
+    protected string $to='';
+
+    protected string $body="";
+    protected string $acc="";
+
+    public function setBody(string $body): AbstractTemplate
+    {
+        $this->body = $body;
+        return $this;
+    }
+    public function setAcc(string $acc): AbstractTemplate
+    {
+        $this->acc = $acc;
+        return $this;
+    }
+
     public function getText(): string
     {
         return $this->text;
+    }
+    public function getAcc(): string
+    {
+        return $this->acc;
     }
 
     public function setText(string $text): AbstractTemplate
@@ -35,6 +55,16 @@ abstract class AbstractTemplate
     public function setTitle(string $title): AbstractTemplate
     {
         $this->title = $title;
+        return $this;
+    }
+    public function getTo(): string
+    {
+        return $this->to;
+    }
+
+    public function setTo(string $to): AbstractTemplate
+    {
+        $this->to = $to;
         return $this;
     }
 
@@ -63,6 +93,9 @@ abstract class AbstractTemplate
     public function isAtAll(): bool
     {
         return in_array('all', $this->at) || in_array('ALL', $this->at);
+    }
+    public function getMailBody():string{
+        return $this->body;
     }
 
     abstract public function getBody();

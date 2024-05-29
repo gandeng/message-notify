@@ -46,11 +46,11 @@ return [
         MailChannel::class => [
             'default' => MessageNotifyInterface::INFO,
             'pipeline' => [
-                'info' => [
-                    'dsn' => env('NOTIFY_MAIL_DSN'),
-                    'from' => env('NOTIFY_MAIL_FROM'),
-                    'to' => env('NOTIFY_MAIL_TO'),
-                ],
+                'dns' => env('NOTIFY_MAIL_DSN'),
+                'from' => env('NOTIFY_MAIL_FROM'),
+                'to' => env('NOTIFY_MAIL_TO'),
+                'password'=>env('NOTIFY_MAIL_SECRET'),
+                'port'=>env('NOTIFY_MAIL_PORT')
             ],
         ],
 
