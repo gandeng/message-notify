@@ -12,10 +12,10 @@ class MailChannel extends AbstractChannel
     public function send(AbstractTemplate $template)
     {
         // TODO: Implement send() method.
-        var_dump('配置文件：');
-        var_dump($template);
+//        var_dump('配置文件：');
+//        var_dump($template);
         $config = $this->getQuery($template->getPipeline());
-        var_dump($config);
+//        var_dump($config);
         $mail_to_email_str = $template->getTo();
         $issent            = false;
         try {
@@ -47,10 +47,6 @@ class MailChannel extends AbstractChannel
                     //                $mail->addAttachment( '../public/upload/vg_15597.pdf', 'new.pdf' );    // Optional name
                 }
 
-                var_dump("邮件内容:");
-                var_dump($template->getMailBody());
-                $arr=get_object_vars($template);
-                var_dump($arr);
                 // Content
                 $mail->isHTML(true);                                  // Set email format to HTML
                 $mail->Subject = $template->getTitle();//主题
@@ -64,7 +60,7 @@ class MailChannel extends AbstractChannel
 
             //echo 'Message has been sent';
         } catch (Exception $e) {
-            var_dump($e->getMessage());
+//            var_dump($e->getMessage());
             echo "Message could not be sent. Mailer Error: {$mail->ErrorInfo}";
             $issent = false;
         }
