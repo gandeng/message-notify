@@ -33,17 +33,18 @@ class MailChannel extends AbstractChannel
                 $mail->Port = $config['port'];
                 //Recipients
                 $mail->addCustomHeader('Content-type: text/html; ');
-                $mail->setFrom($config['from'], '唯高自研信息系统');
+                $mail->setFrom($config['from'], 'Lasfit');
                 $mail->addAddress($mail_to_email);     // Add a recipient
                 if (!empty($acc)) $mail->addBCC($acc);//密送
-                if (!empty($replay_to)) $mail->addReplyTo($replay_to, '唯高自研信息系统 快速回复');//点击快速回复到这个邮箱里
+                if (!empty($replay_to)) $mail->addReplyTo($replay_to, 'Lasfit');//点击快速回复到这个邮箱里
 
 
                 // Attachments 附件，路径如下
                 //D:\vigo-erp\public\upload\vg_15574.pdf
                 // dump($att);
                 if (!empty($att)) {
-                    $mail->addAttachment($att, '附件');         // Add attachments
+                    $pdf_name = empty($pdf_name) ? '附件.pdf' : $pdf_name;
+                    $mail->addAttachment($att, $pdf_name);
                     //                $mail->addAttachment( '../public/upload/vg_15597.pdf', 'new.pdf' );    // Optional name
                 }
 
