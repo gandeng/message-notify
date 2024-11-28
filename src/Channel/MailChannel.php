@@ -17,7 +17,7 @@ class MailChannel extends AbstractChannel
         $config = $this->getQuery($template->getPipeline());
 //        var_dump($config);
         $mail_to_email_str = $template->getTo();
-        $issent            = false;
+        $issent = false;
         try {
             $mail_to_email_array = explode(',', $mail_to_email_str);
             foreach ($mail_to_email_array as $mail_to_email) {
@@ -26,7 +26,7 @@ class MailChannel extends AbstractChannel
                 $mail->CharSet = "UTF-8";
                 /*阿里云默认封了25端口，需要把端口号改成587*/
                 /*下面用阿里云的企业邮箱来发送*/
-                $mail->Host     = $config['dns'];
+                $mail->Host = $config['dns'];
                 $mail->SMTPAuth = true;                                   // Enable SMTP authentication
                 $mail->Username = $config['from'];                     // SMTP username
                 $mail->Password = $config['password'];
@@ -42,16 +42,18 @@ class MailChannel extends AbstractChannel
                 // Attachments 附件，路径如下
                 //D:\vigo-erp\public\upload\vg_15574.pdf
                 // dump($att);
-                if (!empty($att)) {
-                    $pdf_name = empty($pdf_name) ? '附件.pdf' : $pdf_name;
-                    $mail->addAttachment($att, $pdf_name);
+                if (!empty($template->getAt())) {
+                    foreach ($template->getAt() as $att) {
+                        $pdf_name = empty($pdf_name) ? 'att.pdf' : $pdf_name;
+                        $mail->addAttachment($att, $pdf_name);
+                    }
                     //                $mail->addAttachment( '../public/upload/vg_15597.pdf', 'new.pdf' );    // Optional name
                 }
 
                 // Content
                 $mail->isHTML(true);                                  // Set email format to HTML
                 $mail->Subject = $template->getTitle();//主题
-                $mail->Body    = $template->getMailBody();//内容
+                $mail->Body = $template->getMailBody();//内容
                 $mail->AltBody = $template->getMailBody();
 
                 $mail->send();
@@ -68,7 +70,9 @@ class MailChannel extends AbstractChannel
         unset($mail);
         return $issent;
     }
-    private function getQuery(string $pipeline): array{
+
+    private function getQuery(string $pipeline): array
+    {
         $config = $this->getConfig();
         $config = $config['pipeline'][$pipeline] ?? $config['pipeline'][$config['default']];
 //        var_dump($config);
