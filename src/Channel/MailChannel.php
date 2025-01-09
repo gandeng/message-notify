@@ -17,31 +17,29 @@ class MailChannel extends AbstractChannel
         $config = $this->getQuery($template->getPipeline());
 //        var_dump($config);
         $mail_to_email_str = $template->getTo();
-        $issent = false;
+        $issent            = false;
         try {
             $mail_to_email_array = explode(',', $mail_to_email_str);
             foreach ($mail_to_email_array as $mail_to_email) {
                 $mail = new PHPMailer(true);
                 $mail->isSMTP();
-                $mail->CharSet = "UTF-8";
-                /*阿里云默认封了25端口，需要把端口号改成587*/
-                /*下面用阿里云的企业邮箱来发送*/
-                $mail->Host = $config['dns'];
+                $mail->CharSet  = "UTF-8";
+                $mail->Priority = 1;
+                $mail->Host     = $config['dns'];
                 $mail->SMTPAuth = true;                                   // Enable SMTP authentication
                 $mail->Username = $config['from'];                     // SMTP username
                 $mail->Password = $config['password'];
-                $mail->Port = $config['port'];
+                $mail->Port     = $config['port'];
                 //Recipients
-                $mail->addCustomHeader('Content-type: text/html; ');
+//                $mail->addCustomHeader('Content-type: text/html; ');
                 $mail->setFrom($config['from'], 'Lasfit');
                 $mail->addAddress($mail_to_email);     // Add a recipient
                 if (!empty($acc)) $mail->addBCC($acc);//密送
                 if (!empty($replay_to)) $mail->addReplyTo($replay_to, 'Lasfit');//点击快速回复到这个邮箱里
 
-
-                // Attachments 附件，路径如下
-                //D:\vigo-erp\public\upload\vg_15574.pdf
-                // dump($att);
+                $mail->Subject = $template->getTitle();//主题
+                $mail->Body    = $template->getMailBody();//内容
+                $mail->AltBody = $template->getMailBody();
                 if (!empty($template->getAt())) {
                     foreach ($template->getAt() as $att) {
                         $pdf_name = empty($pdf_name) ? 'att.pdf' : $pdf_name;
@@ -52,18 +50,11 @@ class MailChannel extends AbstractChannel
 
                 // Content
                 $mail->isHTML(true);                                  // Set email format to HTML
-                $mail->Subject = $template->getTitle();//主题
-                $mail->Body = $template->getMailBody();//内容
-                $mail->AltBody = $template->getMailBody();
 
                 $mail->send();
                 $issent = true;
             }
-
-
-            //echo 'Message has been sent';
         } catch (Exception $e) {
-//            var_dump($e->getMessage());
             echo "Message could not be sent. Mailer Error: {$mail->ErrorInfo}";
             $issent = false;
         }
@@ -78,4 +69,6 @@ class MailChannel extends AbstractChannel
 //        var_dump($config);
         return $config;
     }
+
+
 }
