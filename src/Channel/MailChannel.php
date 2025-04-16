@@ -42,6 +42,7 @@ class MailChannel extends AbstractChannel
                 $mail->AltBody = $template->getMailBody();
                 if (!empty($template->getAt())) {
                     foreach ($template->getAt() as $att) {
+                        $pdf_name=explode('/',$att)[count(explode('/',$att))-1];
                         $pdf_name = empty($pdf_name) ? 'att.pdf' : $pdf_name;
                         $mail->addAttachment($att, $pdf_name);
                     }
